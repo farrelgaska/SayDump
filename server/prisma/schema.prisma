@@ -1,0 +1,107 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  avatarUrl String?
+  coverUrl  String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dumps     Dump[]
+  comments  Comment[]
+  reactions Reaction[]
+  bookmarks Bookmark[]
+
+  // Self-referencing many-to-many relationship for Follows
+  followers Follow[] @relation("following")
+  following Follow[] @relation("follower")
+}
+
+model Topic {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  dumps       Dump[]
+}
+
+model Dump {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   @db.Text
+  mood        String   @default("neutral")
+  published   Boolean  @default(true)
+  readingTime Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  topicId     String
+  topic       Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  comments    Comment[]
+  reactions   Reaction[]
+  bookmarks   Bookmark[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  dumpId    String
+  dump      Dump     @relation(fields: [dumpId], references: [id], onDelete: Cascade)
+}
+
+model Reaction {
+  id       String @id @default(uuid())
+  type     String // 'like', 'love', 'haha', etc.
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  dumpId   String
+  dump     Dump   @relation(fields: [dumpId], references: [id], onDelete: Cascade)
+
+  @@unique([authorId, dumpId, type])
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  dumpId    String
+  dump      Dump     @relation(fields: [dumpId], references: [id], onDelete: Cascade)
+
+  @@unique([authorId, dumpId])
+}
+
+model Follow {
+  followerId  String
+  follower    User   @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId String
+  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+}

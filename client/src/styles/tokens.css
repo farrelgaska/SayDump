@@ -1,0 +1,25 @@
+:root {
+  /* Midnight Dump Primary Palette */
+  --background: #0D0D10;
+  --surface: #17171C;
+  --surface-hover: #202026;
+  --border: #2B2B33;
+  --text-primary: #F5F2EA;
+  --text-muted: #A7A3B3;
+  
+  /* Midnight Dump Accents */
+  --accent-lime: #C6FF4A;
+  --accent-purple: #A855F7;
+  --accent-pink: #FF4D8D;
+
+  /* Legacy mood mappings to new accents */
+  --accent-happy: var(--accent-lime);
+  --accent-sad: var(--accent-purple);
+  --accent-excited: var(--accent-pink);
+  --accent-angry: #ef4444;
+  --accent-neutral: var(--text-muted);
+
+  /* Glassmorphism shadows and blurs */
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
+  --blur-glass: 12px;
+}
