@@ -1,11 +1,10 @@
-import dotenv from 'dotenv'
+import 'dotenv/config'
 import app from './app.js'
 
-// Load environment variables
-dotenv.config()
+const PORT = Number(process.env.PORT) || 5000
 
-const PORT = process.env.PORT || 5000
-
-app.listen(PORT, () => {
-  console.log(`[SayDump Server] Running in ${process.env.NODE_ENV || 'development'} mode on http://localhost:${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(
+    `[SayDump Server] Running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+  )
 })
