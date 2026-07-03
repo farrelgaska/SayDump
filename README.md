@@ -2,6 +2,9 @@
 
 SayDump is a fullstack monorepo web application designed with a frontend built on React, TypeScript, Vite, Tailwind CSS, and Zustand, and a backend powered by Node.js, Express, TypeScript, and Prisma with a PostgreSQL database.
 
+# Domain Web
+https://say-dump.vercel.app/
+
 ## Folder Structure
 
 ```txt
